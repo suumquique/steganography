@@ -7,7 +7,7 @@
 Возвращает положительное число, полученное из считанных байтов, если читать справа налево побайтово.
 Например, для двух находящихся в файле по порядку байт 01001101 и 01000010 вернет значение 0100001001001101,
 то есть 16973 в десятичной системе счисления.*/
-unsigned long long getNexBytesNumericValue(fstream& file, size_t bytesCount) {
+unsigned long long getNextBytesNumericValue(fstream& file, size_t bytesCount) {
 	byte* bytes = new byte[bytesCount];
 	unsigned long long result = 0;
 

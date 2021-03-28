@@ -24,7 +24,7 @@ using namespace std;
 #define getFileExtension(filePath) filePath.substr(filePath.find_last_of('.') + 1)
 
 size_t getFileLength(fstream& file);
-unsigned long long getNexBytesNumericValue(fstream& file, size_t bytesCount);
+unsigned long long getNextBytesNumericValue(fstream& file, size_t bytesCount);
 BOOL isFileValid(string filePath);
 int encode(string filePath, WORD packingDegree);
 int decode(string filePath, WORD packingDegree);
