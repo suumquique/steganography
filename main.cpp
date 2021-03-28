@@ -5,10 +5,10 @@ void main(void) {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
-	wstring filePath;
-	wstring neededFileExtension = L".bmp";
+	string filePath;
+	string neededFileExtension = ".bmp";
 	cout << "Введите путь к изображению, в которое будет помещено зашифрованное сообщение: ";
-	getline(wcin, filePath);
+	getline(cin, filePath);
 
 
 	// Проверяем, заканчивается ли строка, содержащая путь к файлу, на его расширение - .bmp
@@ -26,17 +26,18 @@ void main(void) {
 
 	/* Проверяем длину файла: если она меньше требуемых для информации о файле BMP 54 байт + 32 байт для информации о длине скрытого
 	стеганографически сообщения, то значит, что в этот файл точно ничего записать не получится. */
-	if (getFileLength(binaryFile) <= MINIMUM_REQUIRED_FILE_LENGTH_IN_BITS) {
+	if (getFileLength(binaryFile) <= MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES) {
 		cout << "Ошибка: файл скорее всего пуст, или практически все его содержимое удалено. Используйте другой BMP-файл для записи скрытого сообщения" << endl;
 		return;
 	}
 	
-	/* Сдвигаем указатель в файле, пропуская все биты, содержащие информацию о файле (54 первых),
+	/* Сдвигаем указатель в файле, пропуская все байты, содержащие информацию о файле (54 первых),
 	* чтобы сразу начать считывание и изменение байтов, определяющих цвета пикселей */
-	binaryFile.seekg(INFORMATION_BYTES_COUNT * BITS_IN_BYTE, ios_base::beg);
+	binaryFile.seekg(INFORMATION_BYTES_COUNT, ios_base::beg);
 	
 }
 
+// Возвращает размер файла в байтах
 size_t getFileLength(ifstream& file) {
 
 	// Сдвигаем указатель на конец файла
