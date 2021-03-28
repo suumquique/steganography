@@ -54,4 +54,6 @@ void main(void) {
 		return;
 	}
 	
+	binaryFile.seekg(INFORMATION_BYTES_COUNT * BITS_IN_BYTE, ios_base::beg);
+	
 }
