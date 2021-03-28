@@ -18,6 +18,10 @@ using namespace std;
 #define MAX_EXTENSION_LENGTH 20
 // ћинимально возможна€ длина файла в битах, чтобы туда можно было хоть что-то записать
 #define MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES (INFORMATION_BYTES_COUNT + MESSAGE_LENGTH_INFORMATION_BITS_COUNT + sizeof(char) * BITS_IN_BYTE + MAX_EXTENSION_LENGTH * BITS_IN_BYTE)
+// ќшибка, показывающа€, что размер BMP-файла дл€ скрыти€ текста слишком мал
+#define ERROR_SMALL_CONTAINER 999
+
+#define getFileExtension(filePath) filePath.substr(filePath.find_last_of('.') + 1)
 
 // —тепень упаковки скрытого сообщени€: измен€етс€ либо один последний бит каждого байта палитры, либо два последних бита
 enum class PackingDegree {PACKING_ONE_BIT = 1, BACKING_TWO_BITS};

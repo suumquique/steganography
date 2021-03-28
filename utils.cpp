@@ -30,7 +30,7 @@ BOOL isFileValid(string filePath) {
 	string neededFileExtension = ".bmp";
 
 	// Проверяем, заканчивается ли строка, содержащая путь к файлу, на его расширение - .bmp
-	if (filePath.compare(filePath.length() - neededFileExtension.length(), neededFileExtension.length(), neededFileExtension)) {
+	if (getFileExtension(filePath) == neededFileExtension) {
 		cout << "Неверное расширение файла. Требуется файл формата .bmp" << endl;
 		return FALSE;
 	}
