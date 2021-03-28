@@ -19,8 +19,20 @@ using namespace std;
 // Минимально возможная длина файла в битах, чтобы туда можно было хоть что-то записать
 #define MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES (INFORMATION_BYTES_COUNT + MESSAGE_LENGTH_INFORMATION_BITS_COUNT + sizeof(char) * BITS_IN_BYTE + MAX_EXTENSION_LENGTH * BITS_IN_BYTE)
 
+// Степень упаковки скрытого сообщения: изменяется либо один последний бит каждого байта палитры, либо два последних бита
+enum class PackingDegree {PACKING_ONE_BIT = 1, BACKING_TWO_BITS};
+
+// Почему-то не существовало оператора cin для enum, поэтому пришлось добавить перегрузку
+istream& operator>>(std::istream& is, PackingDegree& i)
+{
+    int tmp;
+    if (is >> tmp)
+        i = static_cast<PackingDegree>(tmp);
+    return is;
+}
+
 size_t getFileLength(fstream& file);
 unsigned long long getNexBytesNumericValue(fstream& file, size_t bytesCount);
 BOOL isFileValid(string filePath);
-int encode(string filePath);
-void decode(string filePath);
+int encode(string filePath, PackingDegree packingDegree);
+int decode(string filePath, PackingDegree packingDegree);
