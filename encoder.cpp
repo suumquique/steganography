@@ -44,13 +44,15 @@ int encode(string filePath, WORD packingDegree) {
 	binaryInfoToEncode = new bitset<8>[binaryInfoToEncodeLength + 1];
 	binaryInfoToEncodePtr = binaryInfoToEncode;
 
+	// ƒелаем копию, поскольку будем двигать биты и поломаем длину файла
+	size_t fileToEncodeLengthCopy = fileToEncodeLength;
 	/*»дем по числу из 32 бит (size_t), бер€ по 8 бит за один раз, от младших бит к старшим, однако
 	записываем их в массив в обратном пор€дке. ѕолучаетс€, в итоге сначала идут старшие биты, а затем младшие*/
 	for(int i = MESSAGE_LENGTH_INFORMATION_BITS_COUNT / BITS_IN_BYTE - 1; i > 0 ; i--) {
 		// Ѕерем 8 младших бит и кидаем их в битсет, а битсет переносим в массив по индексу, причем так, что индексы старших будут раньше
-		binaryInfoToEncode[i] = bitset<8>(static_cast<uint8_t>(fileToEncodeLength));
+		binaryInfoToEncode[i] = bitset<8>(static_cast<uint8_t>(fileToEncodeLengthCopy));
 		// ”дал€ем 8 младших бит
-		fileToEncodeLength >>= 8;
+		fileToEncodeLengthCopy >>= 8;
 	}
 	// —двигаем указатель, так как дальше будем идти по нему, на количество заполненных элементов
 	binaryInfoToEncodePtr += MESSAGE_LENGTH_INFORMATION_BITS_COUNT / BITS_IN_BYTE;
@@ -66,6 +68,25 @@ int encode(string filePath, WORD packingDegree) {
 	for (size_t i = 0; i < fileToEncodeLength; i++) {
 		textFile.read((char*)&temp, sizeof(temp));
 		*binaryInfoToEncodePtr++ = bitset<8>(temp);
+	}
+
+
+	// ¬носим результат в младшие биты байтов стегоконтейнера
+	for (size_t i = 0; i < binaryInfoToEncodeLength; i++) {
+		// »дем по битам в каждом битсете на 8 битов из binaryInfoToEncode
+		for (int j = BITS_IN_BYTE - 1; j >= 0; ) {
+			// «амен€ем в каждом байте стегоконтейнера количество младших бит, равное степени упаковки, на биты из текста дл€ кодировани€
+			for (size_t k = 0; k < packingDegree; k++) {
+				/* ¬ставл€ем в текущий элемент стегоконтейнера (bitset<8>) на место k (считаетс€ с младших бит)
+				бит под номером j из битсета (тоже bitset<8>) под номером i в тексте дл€ кодировани€. «атем уменьшаем j, то есть берем
+				более младший бит из того же битсета информации дл€ кодировани€, и так делаем, пока не дойдем до нулевого бита в
+				binaryInfoToEncode[i]. “огда увеличиваем i на единицу и продолжаем. */
+				(*stegocontainerPtr).set(k, binaryInfoToEncode[i].test(j--));
+			}
+			/* ѕосле того, как мы заменили k младших бит в текущем битсете (bitset<8>) стегоконтейнера, переходим
+			* к следующему битсету, увеличива€ указатель (то есть, на следующей итерации будем работать уже с новым битсетом) */
+			stegocontainerPtr++;
+		}
 	}
 
 	return ERROR_SUCCESS;

@@ -12,7 +12,7 @@ int main(void) {
 	if (isFileValid(filePath) == FALSE) return INVALID_FILE_SIZE;
 
 	WORD packingDegree;
-	cout << "Введите степень упаковки содержимого: 1 - упаковка в один бит, 2 - упаковка в два бита и так далее (не больше 8): ";
+	cout << "Введите степень упаковки содержимого: 1 - упаковка в один бит, 2 - упаковка в два бита и так далее (не больше 8, только четные): ";
 	cin >> packingDegree;
 	
 	encode(filePath, packingDegree);
