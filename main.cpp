@@ -1,13 +1,5 @@
 #include "main.h"
 
-// Количество байт в формате .bmp, в которые записывается информация о файле, а не цвета пикселей
-#define INFORMATION_BYTES_COUNT 54
-// Количество бит в байте
-#define BITS_IN_BYTE 8
-/* Количество бит, выделенных на информацию о длине скрытого сообщения (в битах).
-* Учитываем то, что на 1 бит информации требуется 1 байт для ее скрытия (или на 2 бита один байт) */
-#define MESSAGE_LENGTH_INFORMATION_BITS_COUNT 32
-
 void main(void) {
 	// Устанавливаем русскую кодировку в консоли
 	SetConsoleOutputCP(1251);
@@ -34,7 +26,7 @@ void main(void) {
 
 	/* Проверяем длину файла: если она меньше требуемых для информации о файле BMP 54 байт + 32 байт для информации о длине скрытого
 	стеганографически сообщения, то значит, что в этот файл точно ничего записать не получится. */
-	if (getFileLength(binaryFile) <= INFORMATION_BYTES_COUNT * BITS_IN_BYTE + MESSAGE_LENGTH_INFORMATION_BITS_COUNT * BITS_IN_BYTE) {
+	if (getFileLength(binaryFile) <= MINIMUM_REQUIRED_FILE_LENGTH_IN_BITS) {
 		cout << "Ошибка: файл скорее всего пуст, или практически все его содержимое удалено. Используйте другой BMP-файл для записи скрытого сообщения" << endl;
 		return;
 	}
