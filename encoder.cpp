@@ -32,6 +32,7 @@ int encode(string filePath, WORD packingDegree) {
 		binaryFile.read((char*)&temp, sizeof(temp));
 		stegocontainer[i] = bitset<8>(temp);
 	}
+	binaryFile.close();
 	
 	// Пропускаем 54 бита, которые в BMP-файле предназначены под служебную информацию
 	stegocontainerPtr += INFORMATION_BYTES_COUNT;
@@ -63,6 +64,10 @@ int encode(string filePath, WORD packingDegree) {
 	for (size_t i = 0; i < fileToEncodeLength; i++) {
 		textFile.read((char*)&temp, sizeof(temp));
 		*binaryInfoToEncodePtr++ = bitset<8>(temp);
+	}
+
+	for (size_t i = 0; i < binaryInfoToEncodeLength;) {
+
 	}
 
 	return ERROR_SUCCESS;
