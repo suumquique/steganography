@@ -44,13 +44,15 @@ int encode(string filePath, WORD packingDegree) {
 	binaryInfoToEncode = new bitset<8>[binaryInfoToEncodeLength + 1];
 	binaryInfoToEncodePtr = binaryInfoToEncode;
 
-	/*Превращаем size_t значение длины (количества символов) в файле в bitset из 32 бит и перекидываем его в основной массив
-	информации для кодирования */
-	messageToEncodeLength = bitset<32>(fileToEncodeLength);
-	for (size_t i = 0; i < MESSAGE_LENGTH_INFORMATION_BITS_COUNT; i++) {
-		binaryInfoToEncode[i / 8][i % 8] = messageToEncodeLength[i];
+	/*Идем по числу из 32 бит (size_t), беря по 8 бит за один раз, от младших бит к старшим, однако
+	записываем их в массив в обратном порядке. Получается, в итоге сначала идут старшие биты, а затем младшие*/
+	for(int i = MESSAGE_LENGTH_INFORMATION_BITS_COUNT / BITS_IN_BYTE - 1; i > 0 ; i--) {
+		// Берем 8 младших бит и кидаем их в битсет, а битсет переносим в массив по индексу, причем так, что индексы старших будут раньше
+		binaryInfoToEncode[i] = bitset<8>(static_cast<uint8_t>(fileToEncodeLength));
+		// Удаляем 8 младших бит
+		fileToEncodeLength >>= 8;
 	}
-	// Так как будем пользоваться арифметикой указателей, показываем, что 4 ячейки уже заняли
+	// Сдвигаем указатель, так как дальше будем идти по нему, на количество заполненных элементов
 	binaryInfoToEncodePtr += MESSAGE_LENGTH_INFORMATION_BITS_COUNT / BITS_IN_BYTE;
 
 	/*Теперь записываем расширение исходного файла, который прячем (кодируем). Расширение будет писаться в начало 
@@ -64,10 +66,6 @@ int encode(string filePath, WORD packingDegree) {
 	for (size_t i = 0; i < fileToEncodeLength; i++) {
 		textFile.read((char*)&temp, sizeof(temp));
 		*binaryInfoToEncodePtr++ = bitset<8>(temp);
-	}
-
-	for (size_t i = 0; i < binaryInfoToEncodeLength;) {
-
 	}
 
 	return ERROR_SUCCESS;
