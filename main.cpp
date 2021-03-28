@@ -20,7 +20,7 @@ int main(void) {
 	
 	dwRetStatus = encode(filePath, packingDegree);
 	if (dwRetStatus != ERROR_SUCCESS) {
-		cout << "Запись информации в стегоконтейнер не удалась. Работа программы завершена со статусом " << status << endl;
+		cout << "Запись информации в стегоконтейнер не удалась. Работа программы завершена со статусом " << dwRetStatus << endl;
 		return dwRetStatus;
 	}
 	else cout << "Информация успешно записана в стегоконтейнер и перенесена в BMP-файл." << endl;
