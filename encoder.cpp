@@ -70,6 +70,9 @@ int encode(string filePath, WORD packingDegree) {
 		*binaryInfoToEncodePtr++ = bitset<8>(temp);
 	}
 
+	// Закрываем файл, закончив работу с ним
+	textFile.close();
+
 
 	// Вносим результат в младшие биты байтов стегоконтейнера
 	for (size_t i = 0; i < binaryInfoToEncodeLength; i++) {
@@ -88,6 +91,8 @@ int encode(string filePath, WORD packingDegree) {
 			stegocontainerPtr++;
 		}
 	}
+
+
 
 	return ERROR_SUCCESS;
 }
