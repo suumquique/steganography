@@ -1,5 +1,14 @@
 #include "main.h"
 
+// ѕочему-то не существовало оператора cin дл€ enum, поэтому пришлось добавить перегрузку
+istream& operator>>(istream& is, PackingDegree& i)
+{
+	int tmp;
+	if (is >> tmp)
+		i = static_cast<PackingDegree>(tmp);
+	return is;
+}
+
 int main(void) {
 	// ”станавливаем русскую кодировку в консоли
 	SetConsoleOutputCP(1251);

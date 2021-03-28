@@ -22,15 +22,6 @@ using namespace std;
 // Степень упаковки скрытого сообщения: изменяется либо один последний бит каждого байта палитры, либо два последних бита
 enum class PackingDegree {PACKING_ONE_BIT = 1, BACKING_TWO_BITS};
 
-// Почему-то не существовало оператора cin для enum, поэтому пришлось добавить перегрузку
-istream& operator>>(std::istream& is, PackingDegree& i)
-{
-    int tmp;
-    if (is >> tmp)
-        i = static_cast<PackingDegree>(tmp);
-    return is;
-}
-
 size_t getFileLength(fstream& file);
 unsigned long long getNexBytesNumericValue(fstream& file, size_t bytesCount);
 BOOL isFileValid(string filePath);
