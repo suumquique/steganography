@@ -5,17 +5,25 @@ int main(void) {
 	SetConsoleOutputCP(1251);
 	SetConsoleCP(1251);
 
-	string filePath;
+	string filePath; // Путь к BMP-файлу (стегоконтейнеру)
+	DWORD dwRetStatus; // Статус возврата
+	WORD packingDegree; // Степень упаковки содержимого: 1, 2, 4 или 8 бит.
+	
+
 	cout << "Введите путь к изображению, в которое будет помещено зашифрованное сообщение: ";
 	getline(cin, filePath);
 
 	if (isFileValid(filePath) == FALSE) return INVALID_FILE_SIZE;
 
-	WORD packingDegree;
 	cout << "Введите степень упаковки содержимого: 1 - упаковка в один бит, 2 - упаковка в два бита и так далее (не больше 8, только четные): ";
 	cin >> packingDegree;
 	
-	encode(filePath, packingDegree);
+	dwRetStatus = encode(filePath, packingDegree);
+	if (dwRetStatus != ERROR_SUCCESS) {
+		cout << "Запись информации в стегоконтейнер не удалась. Работа программы завершена со статусом " << status << endl;
+		return dwRetStatus;
+	}
+	else cout << "Информация успешно записана в стегоконтейнер и перенесена в BMP-файл." << endl;
 
 	return ERROR_SUCCESS;
 }
