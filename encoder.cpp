@@ -12,14 +12,15 @@ int encode(string filePath, WORD packingDegree) {
 	bitset<BITS_IN_BYTE * 4> messageToEncodeLength; // Длина кодируемого сообщения в битовом формате
 	byte temp; // Временнная переменная для побайтового считывания
 
+	fstream binaryFileIn(filePath, ios::binary | ios::in); // Файл BMP-контейнера, откуда будем считывать информацию
+
 	cout << "Введите путь к файлу, содержимое которого требуется скрыть в BMP-изображении: ";
 	cin >> fileToEncodePath;
 	fstream textFile(fileToEncodePath, ios::binary | ios::in);
 	if (!textFile.is_open()) return ERROR_FILE_INVALID;
 	fileToEncodeExtension = getFileExtension(fileToEncodePath);
 
-	fstream binaryFile(filePath, ios::binary | ios::in);
-	containerLengthInBytes = getFileLength(binaryFile);
+	containerLengthInBytes = getFileLength(binaryFileIn);
 	fileToEncodeLength = getFileLength(textFile);
 	// Если контейнер слишком мал (не сможет вместить зашифрованный файл) кидаем ошибку
 	neededBytesToFitEncodedMessage = (fileToEncodeLength * (BITS_IN_BYTE / packingDegree + 1)) + MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES;
@@ -29,10 +30,10 @@ int encode(string filePath, WORD packingDegree) {
 	stegocontainer = new bitset<8>[containerLengthInBytes], stegocontainerPtr = stegocontainer;
 	// Считываем данные из двоичного файла побайтово и преобразуем байты в bitset из 8 битов
 	for (size_t i = 0; i < containerLengthInBytes; i++) {
-		binaryFile.read((char*)&temp, sizeof(temp));
+		binaryFileIn.read((char*)&temp, sizeof(temp));
 		stegocontainer[i] = bitset<8>(temp);
 	}
-	binaryFile.close();
+	binaryFileIn.close();
 	
 	// Пропускаем 54 бита, которые в BMP-файле предназначены под служебную информацию
 	stegocontainerPtr += INFORMATION_BYTES_COUNT;
@@ -92,7 +93,20 @@ int encode(string filePath, WORD packingDegree) {
 		}
 	}
 
+	// Создаем поток на вывод, очищаем файл
+	ofstream binaryFileOut(filePath, ios::binary | ios::trunc);
+	if (!binaryFileOut.is_open()) {
+		cout << "Невозможно открыть файл на вывод информации." << endl;
+		return ERROR_FILE_INVALID;
+	}
 
+	// Идем циклом по всему стегоконтейнеру
+	for (size_t i = 0; i < containerLengthInBytes; i++) {
+		// Выводим побитово измененные данные из стегоконтейнера в файл
+		binaryFileOut << (byte) stegocontainer[i].to_ulong();
+	}
+	// Закрываем файл
+	binaryFileOut.close();
 
 	return ERROR_SUCCESS;
 }
