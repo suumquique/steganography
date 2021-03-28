@@ -45,8 +45,11 @@ BOOL isFileValid(string filePath) {
 	стеганографически сообщения, то значит, что в этот файл точно ничего записать не получится. */
 	if (getFileLength(binaryFile) <= MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES) {
 		cout << "Ошибка: файл скорее всего пуст, или практически все его содержимое удалено. Используйте другой BMP-файл для записи скрытого сообщения" << endl;
+		binaryFile.close();
 		return FALSE;
 	}
+
+	binaryFile.close();
 
 	return TRUE;
 }
