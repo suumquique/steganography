@@ -1,9 +1,4 @@
-#include <iostream>
-#include <Windows.h>
-#include <fstream>
-#include <string>
-
-using namespace std;
+#include "main.h"
 
 // Количество байт в формате .bmp, в которые записывается информация о файле, а не цвета пикселей
 #define INFORMATION_BYTES_COUNT 54
@@ -12,18 +7,6 @@ using namespace std;
 /* Количество бит, выделенных на информацию о длине скрытого сообщения (в битах).
 * Учитываем то, что на 1 бит информации требуется 1 байт для ее скрытия (или на 2 бита один байт) */
 #define MESSAGE_LENGTH_INFORMATION_BITS_COUNT 32
-
-size_t getFileLength(ifstream& file) {
-
-	// Сдвигаем указатель на конец файла
-	file.seekg(0, ios_base::end);
-	// Узнаем, на каком месте стоит указатель
-	size_t length_in_bites = file.tellg();
-	// Сдвигаем указатель назад в начало файла
-	file.seekg(0, ios_base::beg);
-
-	return length_in_bites;
-}
 
 void main(void) {
 	// Устанавливаем русскую кодировку в консоли
@@ -60,4 +43,16 @@ void main(void) {
 	* чтобы сразу начать считывание и изменение байтов, определяющих цвета пикселей */
 	binaryFile.seekg(INFORMATION_BYTES_COUNT * BITS_IN_BYTE, ios_base::beg);
 	
+}
+
+size_t getFileLength(ifstream& file) {
+
+	// Сдвигаем указатель на конец файла
+	file.seekg(0, ios_base::end);
+	// Узнаем, на каком месте стоит указатель
+	size_t length_in_bites = file.tellg();
+	// Сдвигаем указатель назад в начало файла
+	file.seekg(0, ios_base::beg);
+
+	return length_in_bites;
 }
