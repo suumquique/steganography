@@ -22,12 +22,17 @@ unsigned long long getNextBytesNumericValue(fstream& file, size_t bytesCount) {
 		result |= bytes[i];
 	}
 
+	// Возвращаем указатель назад на нужное количество байтов
+	file.seekg(- (int) bytesCount);
+
 	delete[] bytes;
 	return result;
 }
 
 BOOL isFileValid(string filePath) {
 	string neededFileExtension = ".bmp";
+	size_t fileLength;
+	
 
 	// Проверяем, заканчивается ли строка, содержащая путь к файлу, на его расширение - .bmp
 	if (getFileExtension(filePath) == neededFileExtension) {
@@ -40,11 +45,23 @@ BOOL isFileValid(string filePath) {
 		cout << "Ошибка: файл не открылся: неверный путь к файлу, либо доступ к нему ограничен." << endl;
 		return FALSE;
 	}
+	fileLength = getFileLength(binaryFile);
+
 
 	/* Проверяем длину файла: если она меньше требуемых для информации о файле BMP 54 байт + 32 байт для информации о длине скрытого
 	стеганографически сообщения, то значит, что в этот файл точно ничего записать не получится. */
-	if (getFileLength(binaryFile) <= MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES) {
+	if (fileLength <= MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES) {
 		cout << "Ошибка: файл скорее всего пуст, или практически все его содержимое удалено. Используйте другой BMP-файл для записи скрытого сообщения" << endl;
+		binaryFile.close();
+		return FALSE;
+	}
+
+	// Пропукаем первые два байта, переходя к тем, где лежит информация о размере файла
+	binaryFile.seekg(2, ios_base::beg);
+
+	// Если реальная длина файла не равна длине, указаной в служебной информации, файл bmp поврежден и с ним работать не стоит
+	if (getNextBytesNumericValue(binaryFile, 4) != fileLength) {
+		cout << "Реальный размер файла не равен длине, указанной в служебной информации. BMP-файл невалиден." << endl;
 		binaryFile.close();
 		return FALSE;
 	}
