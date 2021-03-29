@@ -23,7 +23,14 @@ int main(void) {
 		cout << "Запись информации в стегоконтейнер не удалась. Работа программы завершена со статусом " << dwRetStatus << endl;
 		return dwRetStatus;
 	}
-	else cout << "\n\n" << "Информация успешно записана в стегоконтейнер и перенесена в BMP-файл." << endl;
+	else cout << "\n" << "Информация успешно записана в стегоконтейнер и перенесена в BMP-файл." << endl << endl;
+
+	dwRetStatus = decode(filePath, packingDegree);
+	if (dwRetStatus != ERROR_SUCCESS) {
+		cout << "Корректно считать информацию из стегоконтейнера не удалось. Работа программы завершена со статусом " << dwRetStatus << endl;
+		return dwRetStatus;
+	}
+	else cout << "\n" << "Декодированная информация успешно записана в указанный вами файл вывода." << endl << endl;
 
 	return ERROR_SUCCESS;
 }
