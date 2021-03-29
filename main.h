@@ -20,6 +20,8 @@ using namespace std;
 #define MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES (INFORMATION_BYTES_COUNT + MESSAGE_LENGTH_INFORMATION_BITS_COUNT + sizeof(char) * BITS_IN_BYTE + MAX_EXTENSION_LENGTH * BITS_IN_BYTE)
 // Ошибка, показывающая, что размер BMP-файла для скрытия текста слишком мал
 #define ERROR_SMALL_CONTAINER 999
+// Ошибка, показывающая, что введенная степень упаковки информации не является валидной
+#define ERROR_INVALID_PACKING_DEGREE 998
 
 #define getFileExtension(filePath) filePath.substr(filePath.find_last_of('.') + 1)
 

@@ -17,6 +17,10 @@ int main(void) {
 
 	cout << "¬ведите степень упаковки содержимого: 1 - упаковка в один бит, 2 - упаковка в два бита и так далее (не больше 8, только четные): ";
 	cin >> packingDegree;
+	if (packingDegree < 1 && packingDegree > 8 && packingDegree % 2 != 0) {
+		cout << "¬ведена некорректна€ степень упаковки информации." << endl;
+		return ERROR_INVALID_PACKING_DEGREE;
+	}
 	
 	dwRetStatus = encode(filePath, packingDegree);
 	if (dwRetStatus != ERROR_SUCCESS) {
