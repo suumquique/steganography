@@ -22,12 +22,14 @@ int main(void) {
 		return ERROR_INVALID_PACKING_DEGREE;
 	}
 	
+
 	dwRetStatus = encode(filePath, packingDegree);
 	if (dwRetStatus != ERROR_SUCCESS) {
 		cout << "Запись информации в стегоконтейнер не удалась. Работа программы завершена со статусом " << dwRetStatus << endl;
 		return dwRetStatus;
 	}
 	else cout << "\n" << "Информация успешно записана в стегоконтейнер и перенесена в BMP-файл." << endl << endl;
+
 
 	dwRetStatus = decode(filePath, packingDegree);
 	if (dwRetStatus != ERROR_SUCCESS) {
