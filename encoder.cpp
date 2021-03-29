@@ -108,5 +108,11 @@ int encode(string filePath, WORD packingDegree) {
 	// Закрываем файл
 	binaryFileOut.close();
 
+	// Проверяем, получили ли мы валидную картинку после записи скрытого сообщения
+	if (!isFileValid(filePath)) {
+		cout << "Измененный стегоконтейнер не является валидным BMP-файлом." << endl;
+		return INVALID_FILE_SIZE;
+	}
+
 	return ERROR_SUCCESS;
 }
