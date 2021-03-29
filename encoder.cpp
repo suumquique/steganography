@@ -114,5 +114,9 @@ int encode(string filePath, WORD packingDegree) {
 		return INVALID_FILE_SIZE;
 	}
 
+	// Освобождаем выделенную память
+	delete[] stegocontainer;
+	delete[] binaryInfoToEncode;
+
 	return ERROR_SUCCESS;
 }
