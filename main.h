@@ -15,7 +15,7 @@ using namespace std;
 * Учитываем то, что на 1 бит информации требуется 1 байт для ее скрытия (или на 2 бита один байт) */
 #define MESSAGE_LENGTH_INFORMATION_BITS_COUNT 32
 // Максимальная длина расширения файла
-#define MAX_EXTENSION_LENGTH 16
+#define MAX_EXTENSION_LENGTH 20
 // Минимально возможная длина файла в битах, чтобы туда можно было хоть что-то записать
 #define MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES (INFORMATION_BYTES_COUNT + MESSAGE_LENGTH_INFORMATION_BITS_COUNT + sizeof(char) * BITS_IN_BYTE + MAX_EXTENSION_LENGTH * BITS_IN_BYTE)
 // Ошибка, показывающая, что размер BMP-файла для скрытия текста слишком мал
