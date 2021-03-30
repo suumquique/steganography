@@ -24,8 +24,11 @@ int encode(string filePath, WORD packingDegree) {
 	fileToEncodeLength = getFileLength(textFile);
 	// Если контейнер слишком мал (не сможет вместить зашифрованный файл) кидаем ошибку
 	neededBytesToFitEncodedMessage = (fileToEncodeLength * (BITS_IN_BYTE / packingDegree + 1)) + MINIMUM_REQUIRED_FILE_LENGTH_IN_BYTES;
-	if (neededBytesToFitEncodedMessage >= containerLengthInBytes) return ERROR_SMALL_CONTAINER;
-	
+	if (neededBytesToFitEncodedMessage >= containerLengthInBytes) {
+		cout << "Стегоконтейнер слишком мал, чтобы вместить информацию из файла с заданной степенью сжатия." << endl;
+		return ERROR_SMALL_CONTAINER;
+	}
+
 	// Создаем массив наборов из восьми бит, причем сам массив имеет длину, равную количеству байт в контейнере
 	stegocontainer = new bitset<8>[containerLengthInBytes], stegocontainerPtr = stegocontainer;
 	// Считываем данные из двоичного файла побайтово и преобразуем байты в bitset из 8 битов
