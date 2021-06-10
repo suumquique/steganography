@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.hpp"
 
 int decode(string filePath, WORD packingDegree) {
 	if (!isFileValid(filePath)) {

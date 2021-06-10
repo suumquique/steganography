@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main.hpp"
 
 int encode(string filePath, WORD packingDegree) {
 	string fileToEncodePath; // Путь к файлу, содержимо которого требуется зашифровать (спрятать)
